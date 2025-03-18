@@ -147,7 +147,7 @@ export default function AssemblyEndgame(){
       }
       <header>
         <h1>Assembly: Endgame</h1> 
-        <p>Guess the correct word within 8 attempts to ave the programming word safe from Assembly!</p>
+        <p>Guess the correct word within 8 attempts to keep the programming word safe from Assembly!</p>
       </header>
       <section 
         aria-live="polite" 
