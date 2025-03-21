@@ -5,11 +5,13 @@ import {clsx} from 'clsx'
 import { getFarewellText, getRandomWord } from "./utils";
 import Confetti from 'react-confetti';
 import sadTrombone from "./sounds/sad-trombone.mp3"
+import victoryClapping from "./sounds/victoryClapping.mp3"
 
 export default function AssemblyEndgame(){
   //State values
   const [currentWord, setCurrentWord] = useState(() => getRandomWord())
   const [guessedLetters, setguessedLetters] = useState([])
+  const [audio, setAudio] = useState(null)
   //Derived values
   const numGuessesLeft = languages.length - 1
   const wrongGuessCount = guessedLetters.filter(letter => (!currentWord.includes(letter))).length
@@ -22,11 +24,28 @@ export default function AssemblyEndgame(){
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
   useEffect(() => {
+    if(isGameWon){
+      const audio = new Audio(victoryClapping)
+      audio.play();
+      setAudio(audio);
+    }
+  }, [isGameWon])
+
+  useEffect(() => {
     if (isGameLost) {
       const audio = new Audio(sadTrombone);
       audio.play();
+      setAudio(audio);
     }
   }, [isGameLost]);
+
+  useEffect(() => {
+    return () => {
+      if(audio){
+        audio.pause();
+      }
+    }
+  }, [audio]);
 
   function addGuessedLetter(letter){
     setguessedLetters(prevLetters => {
@@ -131,6 +150,9 @@ export default function AssemblyEndgame(){
   function startNewGame(){
     setCurrentWord(getRandomWord)
     setguessedLetters([])
+    if(audio){
+      audio.pause();
+    }
   }
  
 
